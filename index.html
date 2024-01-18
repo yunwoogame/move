@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>키보드로 움직이기</title>
+    <title>키보드로 지속적으로 움직이기</title>
     <style>
         body {
             margin: 0;
@@ -26,31 +26,40 @@
         let playerX = 0;
         let playerY = 0;
         const playerSpeed = 5;
+        const keysPressed = {};
 
         function updatePlayerPosition() {
             player.style.transform = `translate(${playerX}px, ${playerY}px)`;
         }
 
-        function handleKeyPress(event) {
-            switch (event.key) {
-                case 'a':
-                    playerX -= playerSpeed;
-                    break;
-                case 'd':
-                    playerX += playerSpeed;
-                    break;
-                case 'w':
-                    playerY -= playerSpeed;
-                    break;
-                case 's':
-                    playerY += playerSpeed;
-                    break;
+        function handleKeyDown(event) {
+            keysPressed[event.key] = true;
+        }
+
+        function handleKeyUp(event) {
+            keysPressed[event.key] = false;
+        }
+
+        function handleKeyPress() {
+            if (keysPressed['a']) {
+                playerX -= playerSpeed;
+            }
+            if (keysPressed['d']) {
+                playerX += playerSpeed;
+            }
+            if (keysPressed['w']) {
+                playerY -= playerSpeed;
+            }
+            if (keysPressed['s']) {
+                playerY += playerSpeed;
             }
 
             updatePlayerPosition();
         }
 
-        document.addEventListener('keydown', handleKeyPress);
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+        setInterval(handleKeyPress, 20);
     </script>
 </body>
 </html>
